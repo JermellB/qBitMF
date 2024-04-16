@@ -51,11 +51,11 @@ def process_config(hop_id, iface, config_file):
 
 def main():
     # Create the wg netns
-    run(f"ip netns delete {WG_NETNS}", shell=True, stdout=DEVNULL, stderr=STDOUT)
-    run(f"ip netns add {WG_NETNS}", shell=True)
+    run(f"ip netns delete {WG_NETNS}", shell=False, stdout=DEVNULL, stderr=STDOUT)
+    run(f"ip netns add {WG_NETNS}", shell=False)
 
     # Enable localhost in netns (needed for socat to access the WebUI)
-    run(f"ip -n {WG_NETNS} link set lo up", shell=True)
+    run(f"ip -n {WG_NETNS} link set lo up", shell=False)
 
     # Process each WireGuard config file
     # Each interface gets configured as a routable "nexthop", which
@@ -91,7 +91,7 @@ def main():
     )
 
     # Make the default route use this nexthop group
-    run(f"ip -n {WG_NETNS} route add default nhid 9999", shell=True)
+    run(f"ip -n {WG_NETNS} route add default nhid 9999", shell=False)
 
 
 if __name__ == "__main__":
